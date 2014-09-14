@@ -1,10 +1,10 @@
 #
 # Creates pseudo distributed hadoop 2.5.1
-# Debian:lastest Wheezy
+# Debian:wheezy
 # docker build -t meabed/hadoop-debian:latest .
 #
 
-FROM debian:latest
+FROM debian:wheezy
 MAINTAINER Mohamed Meabed "mo.meabed@gmail.com"
 
 USER root
