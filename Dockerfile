@@ -1,6 +1,8 @@
+#
 # Creates pseudo distributed hadoop 2.5.1
 # Debian:lastest Wheezy
-# docker build -t meabed/hadoop .
+# docker build -t meabed/hadoop-debian:latest .
+#
 
 FROM debian:latest
 MAINTAINER Mohamed Meabed "mo.meabed@gmail.com"
@@ -40,6 +42,7 @@ RUN mkdir -p /opt/downloads && cd /opt/downloads && curl -SsfLO "http://www.eu.a
 RUN cd /opt && tar xvfz /opt/downloads/hadoop-$HADOOP_VERSION.tar.gz
 RUN ln -s /opt/hadoop-$HADOOP_VERSION /opt/hadoop
 
+
 ENV HADOOP_PREFIX /opt/hadoop
 ENV HADOOP_HOME /opt/hadoop
 
@@ -55,8 +58,8 @@ RUN cp $HADOOP_PREFIX/etc/hadoop/*.xml $HADOOP_PREFIX/input
 # pseudo distributed
 ADD core-site.xml.template $HADOOP_PREFIX/etc/hadoop/core-site.xml.template
 RUN sed s/HOSTNAME/localhost/ $HADOOP_PREFIX/etc/hadoop/core-site.xml.template > $HADOOP_PREFIX/etc/hadoop/core-site.xml
-ADD hdfs-site.xml $HADOOP_PREFIX/etc/hadoop/hdfs-site.xml
 
+ADD hdfs-site.xml $HADOOP_PREFIX/etc/hadoop/hdfs-site.xml
 ADD mapred-site.xml $HADOOP_PREFIX/etc/hadoop/mapred-site.xml
 ADD yarn-site.xml $HADOOP_PREFIX/etc/hadoop/yarn-site.xml
 
@@ -66,6 +69,7 @@ RUN $HADOOP_PREFIX/bin/hdfs namenode -format
 
 RUN rm  $HADOOP_PREFIX/lib/native/*
 RUN curl -Ls http://dl.bintray.com/meabed/hadoop-debian/hadoop-native-64-2.5.1.tar|tar -x -C $HADOOP_PREFIX/lib/native/
+
 
 ADD ssh_config /root/.ssh/config
 RUN chmod 600 /root/.ssh/config
